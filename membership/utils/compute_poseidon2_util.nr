@@ -4,9 +4,7 @@
 // Public input:  in
 // Public output: out
 
-// Import the Poseidon hash function from the Noir std library.
-// Note: This must go in the Nargo.toml file.
-//
+// Add to Nargo.toml:
 // [dependencies]
 // poseidon = { tag = "v0.1.1", git = "https://github.com/noir-lang/poseidon" }
 
