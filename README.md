@@ -36,7 +36,7 @@ The take-home reuses commitment + nullifier from `membership/noir/` and adds Mer
 ## How to run
 
 - **Circom (in-class):** open files under `*/circom/` in [zkrepl.dev](https://zkrepl.dev).
-- **Noir (in-class + assignment):** open files under `*/noir/` in [Noir Playground](https://play.noir-lang.org). Use hex for large field elements.
+- **Noir (in-class + assignment):** open files under `*/noir/` in [Noir Playground](https://www.noir-playground.app/). Use hex for large field elements.
 
 Take-home: [`assignment/README.md`](./assignment/README.md) — **Noir only** (`assignment/noir/imt_membership.nr`).
 
