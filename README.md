@@ -24,14 +24,14 @@ dlt26/
 
 ## Suggested order
 
-| Step | Circom | Noir |
-|------|--------|------|
-| 1 | `multiplication/circom/` | `multiplication/noir/` |
-| 2 | `range_check/circom/` | `range_check/noir/` |
-| 3 | `membership/circom/` | `membership/noir/` |
-| 4 | — | `assignment/noir/` (take-home) |
+| Step | Circom | Noir | What you learn |
+|------|--------|------|----------------|
+| 1 | `multiplication/circom/` | `multiplication/noir/` | Constraints, public vs private |
+| 2 | `range_check/circom/` | `range_check/noir/` | Bit/range bounds |
+| 3 | `membership/circom/` | `membership/noir/` | Commitment, **list** membership, nullifier |
+| 4 | — | `assignment/noir/` | Same commitment + nullifier; **add** Merkle path vs public `root` |
 
-The take-home reuses commitment + nullifier from `membership/noir/` and adds Merkle membership under a public `root`.
+Step 3 publishes a list of commitments; step 4 replaces that with a Merkle tree and a single public `root`.
 
 ## How to run
 

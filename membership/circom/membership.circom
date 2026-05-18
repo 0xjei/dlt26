@@ -1,30 +1,29 @@
 pragma circom 2.1.6;
 
+// MEMBERSHIP + NULLIFIER
+// Prove that you know a secret whose Poseidon commitment appears in a public
+// list, without revealing the secret or which entry matched. Output nullifier only.
+//
+// Teaches: commitment, set membership, nullifier. Assignment adds Merkle + root.
+//
+// PUBLIC:  commitments[N], scope (inputs) + nullifier (output)
+// PRIVATE: secret, commitment (internal)
+
 include "circomlib/circuits/poseidon.circom";
 include "circomlib/circuits/comparators.circom";
-
-// MEMBERSHIP + NULLIFIER CIRCUIT
-// Prove that you know a secret whose Poseidon commitment appears in a public
-// list, without revealing the secret or which list entry matched. Also expose
-// a nullifier derived from the secret and a public scope, so the same identity
-// cannot be used twice in that scope.
-//
-// Private input:  secret
-// Public inputs:  commitments[N], external_nullifier
-// Public outputs: commitment (= Poseidon(secret)), nullifier (= Poseidon(secret, external_nullifier))
 
 template Membership(N) {
     signal input secret;
     signal input commitments[N];
-    signal output commitment;
 
     component poseidon = Poseidon(1);
     poseidon.inputs[0] <== secret;
+    signal commitment;
     commitment <== poseidon.out;
 
     component isEqual[N];
     signal matches[N];
-    signal sum[N+1];
+    signal sum[N + 1];
 
     sum[0] <== 0;
     for (var i = 0; i < N; i++) {
@@ -32,7 +31,7 @@ template Membership(N) {
         isEqual[i].in[0] <== commitment;
         isEqual[i].in[1] <== commitments[i];
         matches[i] <== isEqual[i].out;
-        sum[i+1] <== sum[i] + matches[i];
+        sum[i + 1] <== sum[i] + matches[i];
     }
 
     sum[N] === 1;
@@ -41,8 +40,7 @@ template Membership(N) {
 template MembershipNullifier(N) {
     signal input secret;
     signal input commitments[N];
-    signal input external_nullifier;
-    signal output commitment;
+    signal input scope;
     signal output nullifier;
 
     component membership = Membership(N);
@@ -50,19 +48,18 @@ template MembershipNullifier(N) {
     for (var i = 0; i < N; i++) {
         membership.commitments[i] <== commitments[i];
     }
-    commitment <== membership.commitment;
 
     component nullifierHash = Poseidon(2);
     nullifierHash.inputs[0] <== secret;
-    nullifierHash.inputs[1] <== external_nullifier;
+    nullifierHash.inputs[1] <== scope;
     nullifier <== nullifierHash.out;
 }
 
-component main {public [commitments, external_nullifier]} = MembershipNullifier(4);
+component main {public [commitments, scope]} = MembershipNullifier(4);
 
 /* INPUT = {
     "secret": "42",
-    "external_nullifier": "1",
+    "scope": "1",
     "commitments": [
         "8645981980787649023086883978738420856660271013038108762834452721572614684349",
         "17853941289740592551682164141790101668489478619664963356488634739728685875777",
@@ -70,3 +67,7 @@ component main {public [commitments, external_nullifier]} = MembershipNullifier(
         "12326503012965816391338144612242952408728683609716147019497703475006801258307"
     ]
 } */
+
+// Expected nullifier:
+//   16556036937753546091282698062266362651008751416415631538814028886573393469713
+//   0x249a628467bd8aee0e896aed253246bad19f524fe2832233cfaf08b5851d6111

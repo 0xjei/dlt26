@@ -89,11 +89,12 @@ Work in `noir/imt_membership.nr` — fill the three `TODO` blocks. Do not copy f
 
 ### Step 1 — Commitment
 
-- Reuse the **one-input Poseidon** pattern from `membership/noir/` (commitment from `secret`).
-- The result is a private `Field`, not a public input or return value.
+- Reuse the **one-input Poseidon** pattern from `membership/noir/` (`commitment = hash_1(secret)`).
+- The result is a private `Field`, not a public input or return value (unlike the warm-up, where commitments are public inputs).
 
 ### Step 2 — Merkle root
 
+- **New in the assignment:** replace the warm-up’s list check with Merkle path verification.
 - The Merkle **leaf** is `commitment`, not `secret`.
 - `leaf_index` must become **four little-endian bits** (path left/right at each level).
 - Build a sibling array from `sibling_0` … `sibling_3` (already done in `main` — pass it through).
@@ -102,7 +103,7 @@ Work in `noir/imt_membership.nr` — fill the three `TODO` blocks. Do not copy f
 
 ### Step 3 — Nullifier
 
-- Reuse the **two-input Poseidon** pattern from `membership/noir/` (`secret` and `scope` — same order as `external_nullifier` there).
+- Reuse the **two-input Poseidon** pattern from `membership/noir/` (`secret` and `scope`).
 - Return that value from `imt_membership_nullifier`; `main` already exposes it as the public output.
 
 ### Stuck?
