@@ -2,20 +2,19 @@ pragma circom 2.1.6;
 
 include "circomlib/circuits/bitify.circom";
 
-// RANGE CHECK 32 bits
-// Prove that a secret value lies in [0, 2^32) without revealing it.
+// RANGE CHECK 53 bits
+// Prove that a secret value lies in [0, 2^53) without revealing it.
 //
 // Private input: value
 
 template RangeCheck(n) {
     signal input value;
 
-    // Num2Bits decomposes value into n bits; if value >= 2^n, proof fails
     component bits = Num2Bits(n);
     bits.in <== value;
 }
 
-component main = RangeCheck(32);
+component main = RangeCheck(53);
 
 /* INPUT = {
     "value": "42"
